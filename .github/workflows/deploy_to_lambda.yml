@@ -11,21 +11,16 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Write pem files from secrets
-
-      # run: |
-      #   echo "${{ secrets.REITY_PUBLIC_CERT_DEV }}" > app/reity_public_cert.pem
-      #   echo "${{ secrets.REITY_PRIVATE_KEY_DEV }}" > app/reity_private_key.pem
-      #   echo "${{ secrets.SHINKANSEN_PUBLIC_CERT_DEV }}" > app/shinkansen_public_cert.pem
-
     - name: Create ZIP deployment package
+
       run: zip -r deploy_package.zip ./
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
 
     - name: Upload package to S3 bucket
-      run: aws s3 cp deploy_package.zip s3://${{ secrets.BUCKET_NAME }}/
+      run: aws s3 cp deploy_package.zip "s3://${{ secrets.BUCKET_NAME }}/"
