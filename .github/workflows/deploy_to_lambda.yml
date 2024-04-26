@@ -11,8 +11,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Write pem files from secrets
-    - name: Create ZIP deployment package
 
+      run: echo "Writing pem files from secrets" # Este comando no hará nada
+
+    - name: Create ZIP deployment package
       run: zip -r deploy_package.zip ./
 
     - name: Configure AWS Credentials
